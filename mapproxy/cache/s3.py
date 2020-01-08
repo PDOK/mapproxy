@@ -156,7 +156,7 @@ class S3Cache(TileCacheBase):
 
         extra_args = {}
         if self.file_ext in ('jpeg', 'png'):
-            extra_args['ContentType'] = 'image/' + self.file_ext
+            extra_args['ContentType'] = self.file_ext
         if self.access_control_list:
             extra_args['ACL'] = self.access_control_list
         with tile_buffer(tile) as buf:

@@ -218,6 +218,7 @@ class DemoServer(Server):
                                    all_tile_layers=self.tile_layers)
 
     def _render_wmts_template(self, template, req):
+        from mapproxy.request.base import split_mime_type
         template = get_template(template, default_inherit="demo/static.html")
         for layer in self.tile_layers.values():
             if (layer.name == req.args['wmts_layer'] and
@@ -227,7 +228,7 @@ class DemoServer(Server):
 
         restful_url = self.restful_template.replace('{Layer}', wmts_layer.name, 1)
         if '{Format}' in restful_url:
-            restful_url = restful_url.replace('{Format}', wmts_layer.format)
+            restful_url = restful_url.replace('{Format}', split_mime_type(wmts_layer.format)[1])
 
         if wmts_layer.grid.srs.is_latlong:
             units = 'degree'

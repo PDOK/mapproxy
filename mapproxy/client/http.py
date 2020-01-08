@@ -221,7 +221,7 @@ class HTTPClient(object):
     def open_image(self, url, data=None):
         resp = self.open(url, data=data)
         if 'content-type' in resp.headers:
-            if not resp.headers['content-type'].lower().startswith('image'):
+            if not (resp.headers['content-type'].startswith('image') or resp.headers['content-type'].startswith('application/x-proto')):
                 raise HTTPClientError('response is not an image: (%s)' % (resp.read()))
         return ImageSource(resp)
 
@@ -279,7 +279,7 @@ def retrieve_image(url, client=None):
     :raise HTTPClientError: if response content-type doesn't start with image
     """
     resp = open_url(url)
-    if not resp.headers['content-type'].startswith('image'):
+    if not (resp.headers['content-type'].startswith('image') or resp.headers['content-type'].startswith('application/x-proto')):
         raise HTTPClientError('response is not an image: (%s)' % (resp.read()))
     return ImageSource(resp)
 

@@ -24,7 +24,7 @@ from mapproxy.response import Response
 from mapproxy.exception import RequestError
 from mapproxy.service.base import Server
 from mapproxy.request.tile import tile_request
-from mapproxy.request.base import split_mime_type
+#from mapproxy.request.base import split_mime_type
 from mapproxy.layer import map_extent_from_grid
 from mapproxy.source import SourceError
 from mapproxy.srs import SRS
@@ -230,8 +230,13 @@ class TileLayer(object):
 
     @property
     def format(self):
-        _mime_class, format, _options = split_mime_type(self.format_mime_type)
-        return format
+        # print(self.md.get('extension'))
+        # _mime_class, format, _options = split_mime_type(self.format_mime_type)
+        return self.format_mime_type
+
+    @property
+    def extension(self):        
+        return self.md.get('extension')
 
     @property
     def queryable(self):

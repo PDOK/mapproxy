@@ -19,7 +19,7 @@ WMS clients for maps and information.
 import sys
 
 from mapproxy.compat import text_type
-from mapproxy.request.base import split_mime_type
+#from mapproxy.request.base import split_mime_type
 from mapproxy.layer import InfoQuery
 from mapproxy.source import SourceError
 from mapproxy.client.http import HTTPClient
@@ -199,7 +199,8 @@ class WMSLegendClient(object):
 
     def get_legend(self, query):
         resp = self._retrieve(query)
-        format = split_mime_type(query.format)[1]
+        #format = split_mime_type(query.format)[1]
+        format = query.format
         self._check_resp(resp)
         return ImageSource(resp, image_opts=ImageOptions(format=format))
 
@@ -230,7 +231,8 @@ class WMSLegendURLClient(object):
 
     def get_legend(self, query):
         resp = self.http_client.open(self.url)
-        format = split_mime_type(query.format)[1]
+        #format = split_mime_type(query.format)[1]
+        format = query.format
         self._check_resp(resp)
         return ImageSource(resp, image_opts=ImageOptions(format=format))
 

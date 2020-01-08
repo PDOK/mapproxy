@@ -17,7 +17,7 @@
 Retrieve maps/information from WMS servers.
 """
 import sys
-from mapproxy.request.base import split_mime_type
+#from mapproxy.request.base import split_mime_type
 from mapproxy.cache.legend import Legend, legend_identifier
 from mapproxy.image import make_transparent, ImageSource, SubImageSource, bbox_position_in_image
 from mapproxy.image.merge import concat_legends
@@ -248,7 +248,8 @@ class WMSLegendSource(LegendSource):
                     error_occured = True
                     # TODO errors?
                     log.error(e.args[0])
-            format = split_mime_type(query.format)[1]
+            #format = split_mime_type(query.format)[1]
+            format = query.format
             legend = Legend(source=concat_legends(legends, format=format),
                             id=self.identifier, scale=query.scale)
             if not error_occured:

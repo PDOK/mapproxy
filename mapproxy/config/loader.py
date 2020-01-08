@@ -439,6 +439,7 @@ class ImageOptionsConfiguration(ConfigurationBase):
         transparent = image_conf.get('transparent')
         opacity = image_conf.get('opacity')
         img_format = image_conf.get('format')
+        img_extension = image_conf.get('extension')
         colors = image_conf.get('colors')
         mode = image_conf.get('mode')
         encoding_options = image_conf.get('encoding_options')
@@ -450,7 +451,7 @@ class ImageOptionsConfiguration(ConfigurationBase):
 
         # only overwrite default if it is not None
         for k, v in iteritems(dict(transparent=transparent, opacity=opacity, resampling=resampling,
-            format=img_format, colors=colors, mode=mode, encoding_options=encoding_options,
+            format=img_format, extension=img_extension, colors=colors, mode=mode, encoding_options=encoding_options,
         )):
             if v is not None:
                 conf[k] = v
@@ -993,7 +994,7 @@ class TileSourceConfiguration(SourceConfiguration):
 
 def file_ext(mimetype):
     from mapproxy.request.base import split_mime_type
-    _mime_class, format, _options = split_mime_type(mimetype)
+    _mime_class, format, _options = split_mime_type(mimetype)    
     return format
 
 class DebugSourceConfiguration(SourceConfiguration):
@@ -1793,13 +1794,14 @@ class LayerConfiguration(ConfigurationBase):
                 md['format'] = self.context.caches[cache_name].image_opts().format
                 md['cache_name'] = cache_name
                 md['extent'] = extent
+                md['extension']=self.context.caches[cache_name].image_opts().extension
                 tile_layers.append(
                     TileLayer(
                         self.conf['name'], self.conf['title'],
                         info_sources=fi_sources,
                         md=md,
                         tile_manager=cache_source,
-                        dimensions=dimensions,
+                        dimensions=dimensions,                        
                     )
                 )
 

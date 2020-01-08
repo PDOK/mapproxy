@@ -60,6 +60,7 @@ image_opts = {
     'transparent': bool(),
     'resampling_method': str(),
     'format': str(),
+    'extension': str(),
     'encoding_options': {
         anything(): anything()
     },

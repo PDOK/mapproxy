@@ -19,7 +19,8 @@ Service requests (parsing, handling, etc).
 import re
 
 from mapproxy.exception import RequestError
-from mapproxy.request.base import RequestParams, BaseRequest, split_mime_type
+#from mapproxy.request.base import RequestParams, BaseRequest, split_mime_type
+from mapproxy.request.base import RequestParams, BaseRequest
 from mapproxy.request.tile import TileRequest
 from mapproxy.exception import XMLExceptionHandler
 from mapproxy.template import template_loader
@@ -76,8 +77,8 @@ class WMTSTileRequestParams(RequestParams):
         """
         The requested format as string (w/o any 'image/', 'text/', etc prefixes)
         """
-        _mime_class, format, options = split_mime_type(self.get('format', default=''))
-        return format
+        #_mime_class, format, options = split_mime_type(self.get('format', default=''))
+        return self.get('format', default='')
 
     def _set_format(self, format):
         if '/' not in format:

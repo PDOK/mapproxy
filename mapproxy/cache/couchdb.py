@@ -128,7 +128,7 @@ class CouchDBCache(TileCacheBase):
             data = buf.read()
         tile_doc['_attachments'] = {
             'tile': {
-                'content_type': 'image/' + self.file_ext,
+                'content_type': self.file_ext,
                 'data': codecs.decode(
                     base64.b64encode(data).replace(b'\n', b''),
                     'ascii',

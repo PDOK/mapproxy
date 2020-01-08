@@ -98,7 +98,7 @@
       <Style>
         <ows:Identifier>default</ows:Identifier>
       </Style>
-      <Format>image/{{layer.format}}</Format>
+      <Format>{{layer.format}}</Format>
       {{if layer.queryable}}
       {{for format in info_formats.values()}}
       <InfoFormat>{{ format }}</InfoFormat>
@@ -118,8 +118,8 @@
         <TileMatrixSet>{{grid.name}}</TileMatrixSet>
       </TileMatrixSetLink>
       {{endfor}}
-      {{if restful}}
-      <ResourceURL format="image/{{layer.format}}" resourceType="tile"
+      {{if restful}}      
+      <ResourceURL format="{{layer.format}}" resourceType="tile"
         template="{{format_resource_template(layer, resource_template, service)}}"/>
 
       {{if layer.queryable}}

@@ -58,7 +58,7 @@ class LegendCache(object):
             legend.location = os.path.join(self.cache_dir, hash) + '.' + self.file_ext
             ensure_directory(legend.location)
 
-        data = legend.source.as_buffer(ImageOptions(format='image/' + self.file_ext), seekable=True)
+        data = legend.source.as_buffer(ImageOptions(format=self.file_ext), seekable=True)
         data.seek(0)
         log.debug('writing to %s' % (legend.location))
         write_atomic(legend.location, data.read())
