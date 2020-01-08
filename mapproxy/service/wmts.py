@@ -310,8 +310,6 @@ class RestfulCapabilities(Capabilities):
 def format_resource_template(layer, template, service):
     from mapproxy.request.base import split_mime_type
     if '{Format}' in template:
-        print(layer.extension)
-        #template = template.replace('{Format}', split_mime_type(layer.format)[1])
         template = template.replace('{Format}', layer.extension if not (layer.extension is None) else split_mime_type(layer.format)[1])
         
     if '{Layer}' in template:
