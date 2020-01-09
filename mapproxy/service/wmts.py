@@ -102,7 +102,7 @@ class WMTSServer(Server):
         tile = tile_layer.render(request, coverage=limited_to, decorate_img=decorate_img)
 
         # set the content_type to tile.format and not to request.format ( to support mixed_mode)
-        resp = Response(tile.as_buffer(), content_type=tile.format)
+        resp = Response(tile.as_buffer(), content_type=tile_layer.format)
         resp.cache_headers(tile.timestamp, etag_data=(tile.timestamp, tile.size),
                            max_age=self.max_tile_age)
         resp.make_conditional(request.http)
@@ -311,6 +311,7 @@ def format_resource_template(layer, template, service):
     from mapproxy.request.base import split_mime_type
     if '{Format}' in template:
         template = template.replace('{Format}', split_mime_type(layer.format)[1])
+        #template = template.replace('{Format}', layer.format)
         
     if '{Layer}' in template:
         template = template.replace('{Layer}', layer.name)

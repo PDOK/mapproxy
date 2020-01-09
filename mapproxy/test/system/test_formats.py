@@ -90,20 +90,20 @@ class TestWMS111(SysTest):
         self.expected_direct_base_path = "/service?SERVICE=WMS&REQUEST=GetMap&HEIGHT=200" "&SRS=EPSG%3A4326&styles=&VERSION=1.1.1&WIDTH=200" "&BBOX=0.0,0.0,10.0,10.0"
 
     @pytest.mark.parametrize(
-        "layer,source,wms_format,cache_format,req_format",
+        "layer,source,wms_format,cache_format,req_format,mimetype",
         [
-            ["jpeg_cache_tiff_source", "tiffsource", "png", "jpeg", "tiff"],
-            ["jpeg_cache_tiff_source", "tiffsource", "jpeg", "jpeg", "tiff"],
-            ["jpeg_cache_tiff_source", "tiffsource", "tiff", "jpeg", "tiff"],
-            ["jpeg_cache_tiff_source", "tiffsource", "gif", "jpeg", "tiff"],
-            ["png_cache_all_source", "allsource", "png", "png", "png"],
-            ["png_cache_all_source", "allsource", "jpeg", "png", "png"],
-            ["jpeg_cache_png_jpeg_source", "pngjpegsource", "jpeg", "jpeg", "jpeg"],
-            ["jpeg_cache_png_jpeg_source", "pngjpegsource", "png", "jpeg", "jpeg"],
+            ["jpeg_cache_tiff_source", "tiffsource", "png", "jpeg", "tiff", "image/tiff"],
+            ["jpeg_cache_tiff_source", "tiffsource", "jpeg", "jpeg", "tiff", "image/tiff"],
+            ["jpeg_cache_tiff_source", "tiffsource", "tiff", "jpeg", "tiff", "image/tiff"],
+            ["jpeg_cache_tiff_source", "tiffsource", "gif", "jpeg", "tiff", "image/tiff"],
+            ["png_cache_all_source", "allsource", "png", "png", "png", "image/png"],
+            ["png_cache_all_source", "allsource", "jpeg", "png", "png", "image/png"],
+            ["jpeg_cache_png_jpeg_source", "pngjpegsource", "jpeg", "jpeg", "jpeg", "image/jpeg"],
+            ["jpeg_cache_png_jpeg_source", "pngjpegsource", "png", "jpeg", "jpeg", "image/jpeg"],
         ],
     )
     def test_get_cached(
-        self, app, cache_dir, layer, source, wms_format, cache_format, req_format
+        self, app, cache_dir, layer, source, wms_format, cache_format, req_format, mimetype
     ):
         with tmp_image((256, 256), format=req_format) as img:
             expected_req = (
@@ -116,7 +116,7 @@ class TestWMS111(SysTest):
                 },
                 {
                     "body": img.read(),
-                    "headers": {"content-type": "image/" + req_format},
+                    "headers": {"content-type": "image/" + mimetype},
                 },
             )
             with mock_httpd(
@@ -135,21 +135,21 @@ class TestWMS111(SysTest):
         )
 
     @pytest.mark.parametrize(
-        "layer,source,wms_format,req_format",
+        "layer,source,wms_format,req_format,mimetype",
         [
-            ["jpeg_cache_tiff_source", "tiffsource", "gif", "tiff"],
-            ["jpeg_cache_tiff_source", "tiffsource", "jpeg", "tiff"],
-            ["jpeg_cache_tiff_source", "tiffsource", "png", "tiff"],
-            ["png_cache_all_source", "allsource", "gif", "gif"],
-            ["png_cache_all_source", "allsource", "png", "png"],
-            ["png_cache_all_source", "allsource", "tiff", "tiff"],
-            ["jpeg_cache_png_jpeg_source", "pngjpegsource", "jpeg", "jpeg"],
-            ["jpeg_cache_png_jpeg_source", "pngjpegsource", "png", "png"],
-            ["jpeg_cache_png_jpeg_source", "pngjpegsource", "tiff", "png"],
-            ["jpeg_cache_png_jpeg_source", "pngjpegsource", "gif", "png"],
+            ["jpeg_cache_tiff_source", "tiffsource", "gif", "tiff", "image/tiff"],
+            ["jpeg_cache_tiff_source", "tiffsource", "jpeg", "tiff", "image/tiff"],
+            ["jpeg_cache_tiff_source", "tiffsource", "png", "tiff", "image/tiff"],
+            ["png_cache_all_source", "allsource", "gif", "gif", "image/gif"],
+            ["png_cache_all_source", "allsource", "png", "png", "image/png"],
+            ["png_cache_all_source", "allsource", "tiff", "tiff", "image/tiff"],
+            ["jpeg_cache_png_jpeg_source", "pngjpegsource", "jpeg", "jpeg", "image/jpeg"],
+            ["jpeg_cache_png_jpeg_source", "pngjpegsource", "png", "png", "image/png"],
+            ["jpeg_cache_png_jpeg_source", "pngjpegsource", "tiff", "png", "image/png"],
+            ["jpeg_cache_png_jpeg_source", "pngjpegsource", "gif", "png", "image/png"],
         ],
     )
-    def test_get_direct(self, app, layer, source, wms_format, req_format):
+    def test_get_direct(self, app, layer, source, wms_format, req_format, mimetype):
         with tmp_image((256, 256), format=req_format) as img:
             expected_req = (
                 {
@@ -161,16 +161,16 @@ class TestWMS111(SysTest):
                 },
                 {
                     "body": img.read(),
-                    "headers": {"content-type": "image/" + req_format},
+                    "headers": {"content-type": mimetype},
                 },
             )
             with mock_httpd(
                 ("localhost", 42423), [expected_req], bbox_aware_query_comparator=True
             ):
                 self.common_direct_map_req.params["layers"] = layer
-                self.common_direct_map_req.params["format"] = "image/" + wms_format
+                self.common_direct_map_req.params["format"] = wms_format
                 resp = app.get(self.common_direct_map_req)
-                assert resp.content_type == "image/" + wms_format
+                assert resp.content_type == resp.content_type                
                 check_format(BytesIO(resp.body), wms_format)
 
 

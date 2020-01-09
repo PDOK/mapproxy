@@ -418,7 +418,7 @@ def query_to_dict(query):
     d = {}
     if '?' in query:
         query = query.split('?', 1)[-1]
-    for key, value in parse_qsl(query):
+    for key, value in urlparse.parse_qsl(query):
         d[key.lower()] = value
     return d
 

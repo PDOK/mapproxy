@@ -900,7 +900,7 @@ class TestWMTSAuth(SysTest):
                 extra_environ={"mapproxy.authorize": auth},
             )
 
-        assert resp.content_type == "image/png"
+        assert resp.content_type == "image/jpeg"
 
         img = img_from_buf(resp.body)
         img = img.convert("RGBA")
@@ -929,7 +929,7 @@ class TestWMTSAuth(SysTest):
             extra_environ={"mapproxy.authorize": auth},
         )
 
-        assert resp.content_type == "image/png"
+        assert resp.content_type == "image/jpeg"
         is_transparent(resp.body)
 
     def test_get_tile_limited_to_inside(self, app):

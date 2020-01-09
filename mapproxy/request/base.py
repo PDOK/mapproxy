@@ -172,7 +172,7 @@ def url_decode(qs, charset='utf-8', decode_keys=False, include_empty=True,
     Parse query string `qs` and return a `NoCaseMultiDict`.
     """
     tmp = []
-    for key, value in parse_qsl(qs, include_empty):
+    for key, value in urlparse.parse_qsl(qs, include_empty):
         if PY2:
             if decode_keys:
                 key = key.decode(charset, errors)

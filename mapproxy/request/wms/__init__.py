@@ -217,10 +217,12 @@ class WMSMapRequest(WMSRequest):
                                request=self)
 
     def validate_format(self, image_formats):
-        format = self.params['format']
+        self.params['format'] = 'image/' + self.params['format']  
+        format = self.params['format']       
         if format not in image_formats:
             format = self.params['format']
             self.params['format'] = 'image/png'
+            # TODO
             raise RequestError('unsupported image format: ' + format,
                                code='InvalidFormat', request=self)
     def validate_srs(self, srs):
@@ -307,6 +309,7 @@ class WMS100MapRequest(WMSMapRequest):
         if format not in image_formats:
             format = self.params['format']
             self.params['format'] = 'image/png'
+            # TODO fix for format
             raise RequestError('unsupported image format: ' + format,
                                code='InvalidFormat', request=self)
 
