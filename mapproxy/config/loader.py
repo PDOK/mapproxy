@@ -1794,7 +1794,6 @@ class LayerConfiguration(ConfigurationBase):
                 md['format'] = self.context.caches[cache_name].image_opts().format
                 md['cache_name'] = cache_name
                 md['extent'] = extent
-                md['extension']=self.context.caches[cache_name].image_opts().extension
                 tile_layers.append(
                     TileLayer(
                         self.conf['name'], self.conf['title'],

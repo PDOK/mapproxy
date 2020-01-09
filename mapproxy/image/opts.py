@@ -19,14 +19,13 @@ from mapproxy.compat import string_type
 
 class ImageOptions(object):
     def __init__(self, mode=None, transparent=None, opacity=None, resampling=None,
-        format=None, extension=None, bgcolor=None, colors=None, encoding_options=None):
+        format=None, bgcolor=None, colors=None, encoding_options=None):
         self.transparent = transparent
         self.opacity = opacity
         self.resampling = resampling
         if format is not None:
             format = ImageFormat(format)
         self.format = format
-        self.extension = extension
         self.mode = mode
         self.bgcolor = bgcolor
         self.colors = colors
@@ -51,7 +50,6 @@ class ImageOptions(object):
             and self.opacity == other.opacity
             and self.resampling == other.resampling
             and self.format == other.format
-            and self.extension == other.extension
             and self.mode == other.mode
             and self.bgcolor == other.bgcolor
             and self.colors == other.colors

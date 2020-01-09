@@ -230,13 +230,8 @@ class TileLayer(object):
 
     @property
     def format(self):
-        # print(self.md.get('extension'))
         # _mime_class, format, _options = split_mime_type(self.format_mime_type)
         return self.format_mime_type
-
-    @property
-    def extension(self):        
-        return self.md.get('extension')
 
     @property
     def queryable(self):
