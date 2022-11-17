@@ -1132,6 +1132,35 @@ class CacheConfiguration(ConfigurationBase):
                 gpkg_file_path, grid_conf.tile_grid(), table_name
             )
 
+    def _azureblob_cache(self, grid_conf, file_ext):
+        from mapproxy.cache.azureblob import AzureBlobCache
+
+        container_name = self.context.globals.get_value('cache.container_name', self.conf,
+                                                        global_key='cache.azureblob.container_name')
+
+        if not container_name:
+            raise ConfigurationError("no container_name configured for Azure Blob cache %s" % self.conf['name'])
+
+        connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING", self.context.globals.get_value(
+            'cache.connection_string', self.conf, global_key='cache.azureblob.connection_string'))
+
+        if not connection_string:
+            raise ConfigurationError("no connection_string configured for Azure Blob cache %s" % self.conf['name'])
+
+        directory_layout = self.conf['cache'].get('directory_layout', 'tms')
+
+        base_path = self.conf['cache'].get('directory', None)
+        if base_path is None:
+            base_path = os.path.join(self.conf['name'], grid_conf.tile_grid().name)
+
+        return AzureBlobCache(
+            base_path=base_path,
+            file_ext=file_ext,
+            directory_layout=directory_layout,
+            container_name=container_name,
+            connection_string=connection_string
+        )
+
     def _s3_cache(self, grid_conf, file_ext):
         from mapproxy.cache.s3 import S3Cache
 
